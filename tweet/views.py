@@ -1,8 +1,9 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Tweet
+from .models import Tweet , Comment
 from .forms import TweetForm,UserRegistrationForm
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import login ,User
+from django.contrib.auth import login
+from django.contrib.auth.models import User
 
 # Home page
 def index(request):
@@ -95,3 +96,18 @@ def profile(request, username):
         'user_profile': user,
         'tweets': tweets
     })
+    
+@login_required
+def add_comment(request, tweet_id):
+    tweet = get_object_or_404(Tweet, id=tweet_id)
+
+    if request.method == 'POST':
+        text = request.POST.get('text')
+        if text:
+            Comment.objects.create(
+                user=request.user,
+                tweet=tweet,
+                text=text
+            )
+
+    return redirect('tweet_list')    

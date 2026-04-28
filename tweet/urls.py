@@ -11,4 +11,5 @@ urlpatterns = [
     path('register/', views.register, name='register'),  # ✅ THIS LINE IS MUST
     path('like/<int:tweet_id>/', views.like_tweet, name='like_tweet'),
     path('profile/<str:username>/', views.profile, name='profile'),
+    path('comment/<int:tweet_id>/', views.add_comment, name='add_comment'),
 ]

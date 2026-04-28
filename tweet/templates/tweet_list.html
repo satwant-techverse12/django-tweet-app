@@ -36,7 +36,7 @@ chai aur tweet
                     <div class="d-flex align-items-center mb-2">
                         <img src="https://ui-avatars.com/api/?name={{ tweet.user.username }}" 
                              class="rounded-circle me-2" width="40">
-                        
+
                         <a href="{% url 'profile' tweet.user.username %}" 
                            class="text-decoration-none text-dark fw-bold">
                            @{{ tweet.user.username }}
@@ -54,7 +54,7 @@ chai aur tweet
                     <!-- ACTIONS -->
                     <div class="mt-3 d-flex justify-content-between align-items-center">
 
-                        <!-- ❤️ LIKE BUTTON (WORKING) -->
+                        <!-- LIKE -->
                         <form action="{% url 'like_tweet' tweet.id %}" method="post">
                             {% csrf_token %}
                             <button class="btn btn-outline-danger btn-sm">
@@ -71,7 +71,28 @@ chai aur tweet
                                class="btn btn-danger btn-sm">Delete</a>
                         </div>
                         {% endif %}
+                    </div>
 
+                    <!-- COMMENT FORM -->
+                    <form action="{% url 'add_comment' tweet.id %}" method="post" class="mt-3">
+                        {% csrf_token %}
+                        <input type="text" name="text" class="form-control mb-2" placeholder="Write a comment..." required>
+                        <button class="btn btn-sm btn-secondary w-100">Comment</button>
+                    </form>
+
+                    <!-- COMMENTS -->
+                    <div class="mt-2">
+                        {% for comment in tweet.comments.all|slice:":3" %}
+                            <div class="small">
+                                <strong>@{{ comment.user.username }}</strong>: {{ comment.text }}
+                            </div>
+                        {% empty %}
+                            <small class="text-muted">No comments yet</small>
+                        {% endfor %}
+
+                        {% if tweet.comments.count > 3 %}
+                            <small class="text-muted">View more comments...</small>
+                        {% endif %}
                     </div>
 
                 </div>
@@ -89,7 +110,7 @@ chai aur tweet
 
 </div>
 
-<!-- FLOATING CREATE BUTTON -->
+<!-- FLOATING BUTTON -->
 <a href="{% url 'tweet_create' %}" 
    class="btn btn-primary position-fixed bottom-0 end-0 m-4 rounded-circle shadow"
    style="width:60px;height:60px;font-size:24px;">
