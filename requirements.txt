@@ -1,16 +1,7 @@
-<<<<<<< HEAD
 asgiref==3.11.1
 Django==6.0.4
 pillow==12.2.0
 sqlparse==0.5.5
 tzdata==2026.1
 gunicorn
-=======
-asgiref==3.11.1
-Django==6.0.4
-pillow==12.2.0
-sqlparse==0.5.5
-tzdata==2026.1
-gunicorn
->>>>>>> 1dbf2f4a8122197bf9189d0675a42ec8038412a5
 whitenoise
