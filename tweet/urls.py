@@ -9,4 +9,5 @@ urlpatterns = [
     path('delete/<int:tweet_id>/', views.tweet_delete, name='tweet_delete'),
 
     path('register/', views.register, name='register'),  # ✅ THIS LINE IS MUST
+    path('like/<int:tweet_id>/', views.like_tweet, name='like_tweet'),
 ]

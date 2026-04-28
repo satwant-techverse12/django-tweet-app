@@ -5,34 +5,94 @@ chai aur tweet
 {% endblock %}
 
 {% block content %}
- 
-<h1 class="text-center mt-3">Welcome to Chai's Django Project</h1>
 
-<a class="btn btn-primary mb-4" href="{% url 'tweet_create' %}">
-    Create a Tweet
-</a>
+<div class="container mt-5">
 
-<div class="container row gap-3">
+    <h2 class="text-center fw-bold mb-4">🐦 Tweet Feed</h2>
 
-  {% for tweet in tweets %}
-  <div class="card" style="width: 18rem;">
-
-    {% if tweet.photo %}
-      <img src="{{ tweet.photo.url }}" class="card-img-top" alt="tweet image">
-    {% endif %}
-
-    <div class="card-body">
-      <h5 class="card-title">{{ tweet.user.username }}</h5>
-      <p class="card-text">{{ tweet.text }}</p>
-       {% if tweet.user == user %}
-      <a href="{% url 'tweet_edit' tweet.id %}" class="btn btn-primary">Edit</a>
-      <a href="{% url 'tweet_delete' tweet.id %}" class="btn btn-danger">Delete</a>
-      {% endif %}
+    <!-- Create Button -->
+    <div class="text-end mb-3">
+        <a class="btn btn-primary" href="{% url 'tweet_create' %}">
+            + Create Tweet
+        </a>
     </div>
 
-  </div>
-  {% endfor %}
+    <!-- Tweet Grid -->
+    <div class="row">
+        {% for tweet in tweets %}
+        <div class="col-md-4 mb-4">
+
+            <div class="card shadow-lg border-0 h-100">
+
+                {% if tweet.photo %}
+                <img src="{{ tweet.photo.url }}" 
+                     class="card-img-top" 
+                     style="height:200px; object-fit:cover;">
+                {% endif %}
+
+                <div class="card-body d-flex flex-column">
+
+                    <!-- USER -->
+                    <div class="d-flex align-items-center mb-2">
+                        <img src="https://ui-avatars.com/api/?name={{ tweet.user.username }}" 
+                             class="rounded-circle me-2" width="40">
+                        
+                        <a href="#" class="text-decoration-none text-dark fw-bold">
+                            @{{ tweet.user.username }}
+                        </a>
+                    </div>
+
+                    <!-- TEXT -->
+                    <p class="card-text flex-grow-1">{{ tweet.text }}</p>
+
+                    <!-- TIME -->
+                    <small class="text-muted">
+                        {{ tweet.created_at|date:"M d, Y H:i" }}
+                    </small>
+
+                    <!-- ACTIONS -->
+                    <div class="mt-3 d-flex justify-content-between align-items-center">
+
+                        <!-- ❤️ LIKE BUTTON (WORKING) -->
+                        <form action="{% url 'like_tweet' tweet.id %}" method="post">
+                            {% csrf_token %}
+                            <button class="btn btn-outline-danger btn-sm">
+                                ❤️ {{ tweet.total_likes }}
+                            </button>
+                        </form>
+
+                        <!-- EDIT/DELETE -->
+                        {% if tweet.user == user %}
+                        <div>
+                            <a href="{% url 'tweet_edit' tweet.id %}" 
+                               class="btn btn-warning btn-sm">Edit</a>
+                            <a href="{% url 'tweet_delete' tweet.id %}" 
+                               class="btn btn-danger btn-sm">Delete</a>
+                        </div>
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- EMPTY STATE -->
+    {% if not tweets %}
+    <p class="text-center text-muted">No tweets yet. Be the first 🚀</p>
+    {% endif %}
 
 </div>
+
+<!-- FLOATING CREATE BUTTON -->
+<a href="{% url 'tweet_create' %}" 
+   class="btn btn-primary position-fixed bottom-0 end-0 m-4 rounded-circle shadow"
+   style="width:60px;height:60px;font-size:24px;">
+   +
+</a>
 
 {% endblock %}
