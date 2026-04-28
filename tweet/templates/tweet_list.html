@@ -37,8 +37,9 @@ chai aur tweet
                         <img src="https://ui-avatars.com/api/?name={{ tweet.user.username }}" 
                              class="rounded-circle me-2" width="40">
                         
-                        <a href="#" class="text-decoration-none text-dark fw-bold">
-                            @{{ tweet.user.username }}
+                        <a href="{% url 'profile' tweet.user.username %}" 
+                           class="text-decoration-none text-dark fw-bold">
+                           @{{ tweet.user.username }}
                         </a>
                     </div>
 

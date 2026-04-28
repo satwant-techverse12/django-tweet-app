@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Tweet
 from .forms import TweetForm,UserRegistrationForm
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import login
+from django.contrib.auth import login ,User
 
 # Home page
 def index(request):
@@ -86,3 +86,12 @@ def like_tweet(request, tweet_id):
         tweet.likes.add(request.user)      # like
 
     return redirect('tweet_list')
+
+def profile(request, username):
+    user = User.objects.get(username=username)
+    tweets = Tweet.objects.filter(user=user).order_by('-created_at')
+
+    return render(request, 'profile.html', {
+        'user_profile': user,
+        'tweets': tweets
+    })
